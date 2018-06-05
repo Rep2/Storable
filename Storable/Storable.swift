@@ -1,9 +1,9 @@
 import Foundation
 
-enum StorableError: Error, LocalizedError {
+public enum StorableError: Error, LocalizedError {
     case dataNotFound(identifier: String)
 
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .dataNotFound(let identifier):
             return "Data for \(identifier) not stoed in user defaults"
@@ -11,7 +11,7 @@ enum StorableError: Error, LocalizedError {
     }
 }
 
-protocol Storable: Codable {
+public protocol Storable: Codable {
     static var identifier: String { get }
 
     static func fetchFromUserDefaults() throws -> Self
@@ -19,11 +19,11 @@ protocol Storable: Codable {
 }
 
 extension Storable {
-    static var identifier: String {
+    public static var identifier: String {
         return String(describing: Self.self)
     }
 
-    static func fetchFromUserDefaults() throws -> Self {
+    public static func fetchFromUserDefaults() throws -> Self {
         guard let decoded = UserDefaults.standard.object(forKey: identifier) as? Data else {
             throw StorableError.dataNotFound(identifier: identifier)
         }
@@ -31,7 +31,7 @@ extension Storable {
         return try Self.decode(data: decoded)
     }
 
-    func saveInUserDefaults() throws {
+    public func saveInUserDefaults() throws {
         let data = try encode()
 
         UserDefaults.standard.set(data, forKey: Self.identifier)
