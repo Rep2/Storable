@@ -31,6 +31,10 @@ extension Storable {
         return try Self.decode(data: decoded)
     }
 
+    public static func deleteFromUserDefaults() {
+        UserDefaults.standard.removeObject(forKey: identifier)
+    }
+
     public func saveInUserDefaults() throws {
         let data = try encode()
 
